@@ -1,3 +1,11 @@
+body{
+  background-color: black;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* Centraliza no eixo X (horizontal) */
+  align-items: center;     /* Centraliza no eixo Y (vertical) */
+}
 /* Fixa a barra no final da tela */
 input {
   position: fixed;
@@ -15,6 +23,33 @@ input {
 }
 
 /* Margem inferior no conteúdo para o botão não cobrir os textos */
-.conteudo-pagina {
-  margin-bottom: 80px; 
+input{
+  margin-bottom: 30px; 
+}
+h1 {
+    /* O SEGREDO: O gradiente colorido */
+    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+    background-size: 400%;
+    
+    /* Faz o fundo "cortar" no formato das letras */
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    /* Deixa a cor da letra transparente para o fundo aparecer */
+    color: transparent;
+    
+    /* Animação igual a dos botões */
+    animation: glowing-text 20s linear infinite;
+    
+    /* Estilo da fonte */
+    font-family: sans-serif;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Reutilizando sua lógica de animação */
+@keyframes glowing-text {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
 }
