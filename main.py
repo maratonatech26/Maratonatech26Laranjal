@@ -1,51 +1,76 @@
-#flask
-#spck
-from flask import Flask, request, jsonify
-import google.generativeai as genai
-from PIL import Image
 import os
+import base64
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import requests
 
 app = Flask(__name__)
+CORS(app)  # Libera acesso para requisições externas (CORS)
 
-# Configuração da API Key do Gemini
-# Dica: É boa prática usar variáveis de ambiente em produção (os.environ.get)
-GENAI_API_KEY = os.environ["GENAI_API_KEY"]
-genai.configure(api_key=GENAI_API_KEY)
-
-# Inicializa o modelo
-model = genai.GenerativeModel('gemini-1.5-flash')
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 @app.route('/analisar', methods=['POST'])
 def analisar_imagem():
     try:
-        # 1. Verifica se os campos necessários estão na requisição
-        if 'imagem' not in request.files or 'texto' not in request.form:
+        if not GEMINI_API_KEY:
             return jsonify({
                 'sucesso': False, 
-                'erro': 'Envie tanto o campo "imagem" (arquivo) quanto o campo "texto" (form-data).'
+                'erro': 'GEMINI_API_KEY não configurada no servidor.'
+            }), 500
+
+        # Exige APENAS o texto como obrigatório
+        if 'texto' not in request.form or not request.form['texto'].strip():
+            return jsonify({
+                'sucesso': False,
+                'erro': 'O campo "texto" é obrigatório.'
             }), 400
 
-        arquivo_imagem = request.files['imagem']
         prompt_texto = request.form['texto']
+        parts = [{"text": prompt_texto}]
 
-        # 2. Converte o arquivo recebido para uma imagem PIL válida
-        imagem = Image.open(arquivo_imagem.stream)
+        # Se houver imagem enviada na requisição, adiciona ao payload
+        if 'imagem' in request.files and request.files['imagem'].filename != '':
+            arquivo_imagem = request.files['imagem']
+            bytes_imagem = arquivo_imagem.read()
+            imagem_b64 = base64.b64encode(bytes_imagem).decode('utf-8')
+            mime_type = arquivo_imagem.mimetype or 'image/jpeg'
 
-        # 3. Faz a chamada para a API do Gemini
-        response = model.generate_content([prompt_texto, imagem])
+            parts.append({
+                "inline_data": {
+                    "mime_type": mime_type,
+                    "data": imagem_b64
+                }
+            })
 
-        # 4. Retorna o resultado em formato JSON para quem chamou
+        # Endpoint REST oficial
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+        payload = {
+            "contents": [
+                {
+                    "parts": parts
+                }
+            ]
+        }
+
+        response = requests.post(url, json=payload, timeout=30)
+        dados = response.json()
+
+        if response.status_code != 200:
+            return jsonify({'sucesso': False, 'erro': dados}), response.status_code
+
+        texto_resposta = dados['candidates'][0]['content']['parts'][0]['text']
+
         return jsonify({
             'sucesso': True,
-            'analise': response.text
+            'analise': texto_resposta
         }), 200
 
     except Exception as e:
         return jsonify({
-            'sucesso': False, 
+            'sucesso': False,
             'erro': str(e)
         }), 500
 
 if __name__ == '__main__':
-    # Executa o servidor na porta 5000
     app.run(host='0.0.0.0', port=5000, debug=True)

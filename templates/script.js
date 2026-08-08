@@ -1,29 +1,44 @@
-let textoPrompt = document.getElementById('inputPrompt');
-let arquivoImagem = document.getElementById('inputImage');
+let inputPrompt = document.getElementById('inputPrompt');
+let inputImage = document.getElementById('inputImage');
 let printText = document.getElementById('respostaApiText');
-printText.innerHTML=`<h1 class="resposta">FIQUE ATENTOE FAÇA UMA BUSCA</h1>`;
-//push
-async function enviarParaServidor(arquivoImagem, textoPrompt) {
+
+async function enviarParaServidor() {
+  printText.innerHTML = `<h1 class="resposta">PROCESSANDO SUA BUSCA...</h1>`;
+
+  const texto = inputPrompt.value.trim();
+  const arquivo = inputImage.files[0]; // Pode ser undefined se o usuário não escolheu arquivo
+
+  // Validação: Exige apenas o texto
+  if (!texto) {
+    printText.innerHTML = `<p class="resposta">Por favor, digite um texto!</p>`;
+    return;
+  }
+
   const formData = new FormData();
-  
-  // 'imagem' e 'texto' devem bater com os nomes esperados no Flask (request.files / request.form)
-  formData.append('imagem', arquivoImagem); 
-  formData.append('texto', textoPrompt);
+  formData.append('texto', texto);
+
+  // Adiciona a imagem no FormData SOMENTE se ela existir
+  if (arquivo) {
+    formData.append('imagem', arquivo);
+  }
 
   try {
-    const response = await fetch('http://localhost:5000/analisar', {
+    const response = await fetch('http://192.168.1.26:5000/analisar', {
       method: 'POST',
-      body: formData // Não defina Content-Type manualmente aqui, o navegador faz isso sozinho
+      body: formData
     });
 
     const resultado = await response.json();
     
     if (resultado.sucesso) {
-    printText.innerHTML=`<p class="resposta">${resultado.analise}</p>`
+      printText.innerHTML = `<p class="resposta">${resultado.analise}</p>`;
     } else {
-      printText.innerHTML=`<p class="resposta">${resultado.erro}</p>`
+      const detalheErro = typeof resultado.erro === 'object' 
+        ? JSON.stringify(resultado.erro) 
+        : resultado.erro;
+      printText.innerHTML = `<p class="resposta">Erro: ${detalheErro}</p>`;
     }
   } catch (error) {
-printText.innerHTML=`<p class="resposta">Erro de conexão com Flask</p>`
+    printText.innerHTML = `<p class="resposta">Erro de conexão com o servidor Flask.</p>`;
   }
 }
