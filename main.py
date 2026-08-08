@@ -1,4 +1,5 @@
 #flask
+#spck
 from flask import Flask, request, jsonify
 import google.generativeai as genai
 from PIL import Image
