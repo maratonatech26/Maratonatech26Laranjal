@@ -4,6 +4,10 @@ import base64
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
+from dotenv import load_dotenv  # <-- Importado
+
+# Carrega as variáveis de ambiente do seu arquivo kei.env
+load_dotenv('kei.env')
 
 app = Flask(__name__)
 CORS(app)
@@ -15,10 +19,10 @@ def analisar_imagem():
     try:
         # 1. Valida a API Key
         if not GEMINI_API_KEY:
-            print("LOG: Chave GEMINI_API_KEY não configurada no terminal.")
+            print("LOG: Chave GEMINI_API_KEY não configurada no arquivo .env.")
             return jsonify({
                 'sucesso': False, 
-                'erro': 'GEMINI_API_KEY não configurada no terminal.'
+                'erro': 'GEMINI_API_KEY não configurada no arquivo .env.'
             }), 500
 
         # 2. Valida se o texto foi enviado (campo obrigatório)
@@ -46,8 +50,15 @@ def analisar_imagem():
                 }
             })
 
-        # 4. Requisição para a API do Gemini
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+        # 4. Requisição para a API do Gemini (ATUALIZADO AQUI)
+        # URL sem a query string ?key=
+        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+
+        # A chave enviada via Header x-goog-api-key resolve o erro 401
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY.strip()
+        }
 
         payload = {
             "contents": [
@@ -57,7 +68,7 @@ def analisar_imagem():
             ]
         }
 
-        response = requests.post(url, json=payload, timeout=30)
+        response = requests.post(url, headers=headers, json=payload, timeout=30)
         dados = response.json()
 
         if response.status_code != 200:
