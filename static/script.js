@@ -4,23 +4,23 @@ let printText = document.getElementById('respostaApiText');
 const promptPhishing = 
   "Atue como um especialista em cibersegurança. Explique o conceito de Phishing, " +
   "quais são os tipos mais comuns (email, sites falsos) e forneça 3 dicas práticas " +
-  "de como identificar e se proteger contra esse tipo de ataque.";
+  "de como identificar e se proteger contra esse tipo de ataque. Mas, seja o mais breve possível e pergunte se ha alguma dúvida";
 
 const promptDeepfakes = 
   "Atue como um especialista em inteligência artificial e segurança digital. Explique o que são Deepfakes, " +
-  "como essa tecnologia é usada para golpes e quais sinais visuais ou auditivos ajudam a identificar um conteúdo manipulado.";
+  "como essa tecnologia é usada para golpes e quais sinais visuais ou auditivos ajudam a identificar um conteúdo manipulado. Mas, seja o mais breve possível e pergunte se ha alguma dúvida";
 
 const promptSmishing = 
   "Atue como um analista de segurança da informação. Explique o que é Smishing (Phishing via SMS ou aplicativos de mensagem), " +
-  "dê exemplos de abordagens comuns usadas por criminosos e ensine como reagir ao receber uma mensagem suspeita.";
+  "dê exemplos de abordagens comuns usadas por criminosos e ensine como reagir ao receber uma mensagem suspeita. Mas, seja o mais breve possível e pergunte se ha alguma dúvida";
 
 const promptEngenhariaSocial = 
   "Atue como um auditor de segurança. Explique o conceito amplo de Engenharia Social no contexto da cibersegurança, " +
-  "quais são os gatilhos psicológicos mais explorados (urgência, autoridade, medo) e como criar uma cultura de prevenção.";
+  "quais são os gatilhos psicológicos mais explorados (urgência, autoridade, medo) e como criar uma cultura de prevenção. Mas, seja o mais breve possível e pergunte se ha alguma dúvida";
 
 const promptEngajamento = 
   "Atue como um educador em tecnologia. Elabore um quiz rápido e interativo com 3 perguntas de múltipla escolha sobre segurança digital " +
-  "para testar e engajar o usuário. Inclua o gabarito ao final com explicações breves.";
+  "para testar e engajar o usuário. Inclua o gabarito ao final com explicações breves. Mas, seja o mais breve possível e pergunte se ha alguma dúvida";
 
 // Função genérica que junta o prompt base com o texto opcional do usuário
 function montarPayload(promptBase) {
