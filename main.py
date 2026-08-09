@@ -1,9 +1,11 @@
-#flask
 import os
 import base64
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
+from dotenv import load_dotenv
+
+
 from dotenv import load_dotenv  # <-- Importado
 
 # Carrega as variáveis de ambiente do seu arquivo kei.env
@@ -17,11 +19,18 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 @app.route('/analisar', methods=['POST'])
 def analisar_imagem():
     try:
-        # 1. Valida a API Key
+
+        if not GEMINI_API_KEY:
+            print("LOG: Chave GEMINI_API_KEY não configurada no terminal.")
+            return jsonify({
+                'sucesso': False,
+                'erro': 'GEMINI_API_KEY não configurada no terminal.'
+            }), 500
+       # 1. Valida a API Key
         if not GEMINI_API_KEY:
             print("LOG: Chave GEMINI_API_KEY não configurada no arquivo .env.")
             return jsonify({
-                'sucesso': False, 
+                'sucesso': False,
                 'erro': 'GEMINI_API_KEY não configurada no arquivo .env.'
             }), 500
 
@@ -50,6 +59,10 @@ def analisar_imagem():
                 }
             })
 
+
+        # URL usando o modelo ativo no seu projeto: gemini-3.5-flash
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={GEMINI_API_KEY}"
+
         # 4. Requisição para a API do Gemini (ATUALIZADO AQUI)
         # URL sem a query string ?key=
         url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
@@ -68,6 +81,9 @@ def analisar_imagem():
             ]
         }
 
+
+        response = requests.post(url, json=payload, timeout=30)
+
         response = requests.post(url, headers=headers, json=payload, timeout=30)
         dados = response.json()
 
@@ -75,6 +91,12 @@ def analisar_imagem():
             print(f"LOG: Erro retornado pela API do Gemini: {dados}")
             return jsonify({'sucesso': False, 'erro': dados}), response.status_code
 
+
+        candidates = dados.get('candidates', [])
+        if not candidates:
+            return jsonify({'sucesso': False, 'erro': 'Resposta vazia da API', 'detalhes': dados}), 500
+
+        texto_resposta = candidates[0]['content']['parts'][0]['text']
         # 5. Extrai a resposta da API
         texto_resposta = dados['candidates'][0]['content']['parts'][0]['text']
 
