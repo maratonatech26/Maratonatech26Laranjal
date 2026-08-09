@@ -126,7 +126,11 @@ async function enviarParaServidor() {
     const resultado = await response.json();
     
     if (resultado.sucesso) {
-      printText.innerHTML = `<p class="resposta">${resultado.analise}</p>`;
+// Converte a string em Markdown retornada pelo Gemini para HTML formatado
+const HTMLFormatado = marked.parse(resultado.analise);
+
+printText.innerHTML = `<div class="resposta-card">${HTMLFormatado}</div>`;
+
     } else {
       const detalheErro = typeof resultado.erro === 'object' 
         ? JSON.stringify(resultado.erro) 
