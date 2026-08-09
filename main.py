@@ -52,7 +52,7 @@ def analisar_imagem():
                 }
             })
 
-        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={GEMINI_API_KEY}"
 
         headers = {
             "Content-Type": "application/json",
