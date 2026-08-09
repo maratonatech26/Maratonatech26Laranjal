@@ -4,16 +4,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
   <title></title>
 </head>
 
 <body>
-  <div id="respostaApiText"></div>
-  <input id="inputImage" type="file" accept="image/*">
-  <button type="submit" onclick="enviarParaServidor()">enviar</button>
-  <input type="text" id="inputPrompt">
-  <script src="script.js" type="text/javascript" charset="utf-8"></script>
+  <div id="respostaApiText">
+    <button class="matrix" type="button">Phishing Financeiro <div class="code-rain"></div></button>
+    <button class="matrix" type="button">Deepfakes <div class="code-rain"></div></button>
+    <button class="matrix" type="button">Smishing <div class="code-rain"></div></button>
+    <button class="matrix" type="button">Engenharia Social <div class="code-rain"></div></button>
+    <button class="matrix" type="button">Golpes de Engajamento <div class="code-rain"></div></button>
+  </div>
+  
+  <div class="containerButtuns">
+    <input id="inputImage" type="file" accept="image/*">
+    <input type="text" id="inputPrompt" placeholder="Cole o texto ou link suspeito aqui...">
+    <button type="submit" onclick="enviarParaServidor()">Enviar para Análise</button>
+  </div>
+
+ <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 
 </html>

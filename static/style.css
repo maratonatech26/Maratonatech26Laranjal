@@ -1,88 +1,163 @@
-button{
-position: absolute;     /* Mantém em cima da imagem */
-  display: flex;
-  flex-direction: row;    /* Força os botões a ficarem lado a lado */
-  flex-wrap: wrap;        /* Se faltar espaço na tela, eles quebram a linha */
-  justify-content: center;/* Centraliza o grupo de botões */
-  gap: 15px;              /* Aumenta o espaço entre eles */
-  width: 90%;
-}
-.containerButtuns{
-  display: flex;
-  justify-content: space-around; 
+/* Reset Básico e Variáveis de Cores */
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, 'Courier New', monospace;
+}
+
+/* Configuração padrão do body */
+body {
+  position: relative;
+  background-color: #0d1117;
+  color: #1CFF00;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* Camada da imagem de fundo (visível por padrão na tela limpa) */
+body::before {
+  content: "";
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 80%;
-  background-color: #42445A; /* Fundo para não misturar com o texto */
-  padding: 15px;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil superior */
-  
-  /* Alinha os botões lado a lado */
-  
+  inset: 0;
+  background-image: url("/static/img/1000244649.png"); /* Caminho da sua imagem na pasta static/img */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.1; /* Transparência para não ofuscar o layout inicial */
+  z-index: -1;  /* Mantém atrás de todos os botões e inputs */
+  transition: opacity 0.5s ease; /* Transição suave ao sumir */
 }
+
+/* Quando houver texto/resposta na tela, oculta a imagem completamente */
+body.com-resultado::before {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* Container do Menu de Tópicos Educativos */
 #respostaApiText {
-  
-  justify-content: center; /* Centraliza na horizontal */
-  align-items: center;    /* Centraliza na vertical */
-  position: relative;     /* Prepara para os botões ficarem por cima */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
   width: 100%;
+  max-width: 480px;
+  margin-bottom: 2rem;
+  color: #1CFF00;
 }
-.logo{
-  max-width: 100%;        /* Deixa a imagem responsiva */
-  height: auto;
+
+/* Botões Globais / Estilo Hacker Matrix */
+button {
+  position: relative;
+  padding: 1rem 1.5rem;
+  font-size: 20px;
+  font-weight: 600;
+  color: #0117FF;
+  background: #000;
+  border: 1px solid #0018FF;
+  border-radius: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  background: #0f0;
+  color: #000;
+  box-shadow: 0 0 15px #0117FF;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Efeito Code Rain preservado do seu código */
+.code-rain {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 255, 0, 0) 0%,
+    #F5F5F5 50%,
+    rgba(0, 255, 0, 0) 100%
+  );
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.matrix:hover .code-rain {
+  opacity: 1;
+  animation: rain 1s linear infinite;
+}
+
+@keyframes rain {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+/* Container de Envio de Arquivos e Inputs */
+.containerButtuns {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(16, 26, 20, 0.8);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilização dos Inputs */
+input[type="text"] {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background-color: #050a06;
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  color: #0f0;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  box-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+}
+
+/* Customização do Input de Arquivo/Imagem */
+input[type="file"] {
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  background: #000;
+  border: 1px solid #0f0;
+  color: #0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 0.75rem;
+  transition: 0.2s;
+}
+
+input[type="file"]::-webkit-file-upload-button:hover {
+  background: #0f0;
+  color: #000;
 }
 p{
-  color: red;
-}
-body{
-  background-size: cover;                /* Garante que a imagem cubra a tela toda */
-  background-position: center;           /* Centraliza a imagem na tela */
-  background-repeat: no-repeat;          /* Impede que a imagem fique se repetindo */
-  background-attachment: fixed;
-  background-image: url("/static/img/1000244649.png");
-  background-color: black;
-  background-position: center;
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center; /* Centraliza no eixo X (horizontal) */
-  align-items: center;     /* Centraliza no eixo Y (vertical) */
-}
-/* Fixa a barra no final da tela */
-#inputPrompt {
-  
-}
-
-/* Margem inferior no conteúdo para o botão não cobrir os textos */
-#inputPrompt{
-  margin-bottom: 30px; 
-}
-h1 {
-    /* O SEGREDO: O gradiente colorido */
-    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
-    background-size: 400%;
-    
-    /* Faz o fundo "cortar" no formato das letras */
-    -webkit-background-clip: text;
-    background-clip: text;
-    
-    /* Deixa a cor da letra transparente para o fundo aparecer */
-    color: transparent;
-    
-    /* Animação igual a dos botões */
-    animation: glowing-text 20s linear infinite;
-    
-    /* Estilo da fonte */
-    font-family: sans-serif;
-    text-align: center;
-    margin: 20px 0;
-}
-
-/* Reutilizando sua lógica de animação */
-@keyframes glowing-text {
-    0% { background-position: 0 0; }
-    50% { background-position: 400% 0; }
-    100% { background-position: 0 0; }
+  font-size: 20px;
 }

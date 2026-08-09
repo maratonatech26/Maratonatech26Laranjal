@@ -1,6 +1,6 @@
 import os
 import base64
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 import requests
 from dotenv import load_dotenv
@@ -12,14 +12,20 @@ CORS(app)
 
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
+# 1. Rota principal para servir o HTML da pasta 'templates'
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# 2. Rota que processa a requisição da API
 @app.route('/analisar', methods=['POST'])
 def analisar_imagem():
     try:
         if not GEMINI_API_KEY:
-            print("LOG: Chave GEMINI_API_KEY não configurada no terminal.")
+            print("LOG: Chave GEMINI_API_KEY não configurada no arquivo kei.env.")
             return jsonify({
                 'sucesso': False,
-                'erro': 'GEMINI_API_KEY não configurada no terminal.'
+                'erro': 'GEMINI_API_KEY não configurada no arquivo kei.env.'
             }), 500
 
         if 'texto' not in request.form or not request.form['texto'].strip():
@@ -45,8 +51,12 @@ def analisar_imagem():
                 }
             })
 
-        # URL usando o modelo ativo no seu projeto: gemini-3.5-flash
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={GEMINI_API_KEY}"
+        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent"
+
+        headers = {
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY.strip()
+        }
 
         payload = {
             "contents": [
@@ -56,7 +66,7 @@ def analisar_imagem():
             ]
         }
 
-        response = requests.post(url, json=payload, timeout=30)
+        response = requests.post(url, headers=headers, json=payload, timeout=30)
         dados = response.json()
 
         if response.status_code != 200:
