@@ -14,8 +14,9 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # 1. Rota principal para servir o HTML da pasta 'templates'
 @app.route('/')
+
 def index():
-    return render_template('index.html')
+    return render_template('index.html')  # Procura index.html dentro da pasta 'templates/'
 
 # 2. Rota que processa a requisição da API
 @app.route('/analisar', methods=['POST'])
