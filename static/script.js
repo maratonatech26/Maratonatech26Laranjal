@@ -23,7 +23,7 @@ async function enviarParaServidor() {
   }
 
   try {
-    const response = await fetch('http:// localhost/analisar', {
+    const response = await fetch('/analisar', {
       method: 'POST',
       body: formData
     });
