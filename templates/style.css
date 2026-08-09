@@ -2,7 +2,7 @@ p{
   color: red;
 }
 body{
-  background-color: black;
+  background-image: url("");
   margin: 0;
   height: 100vh;
   display: flex;
