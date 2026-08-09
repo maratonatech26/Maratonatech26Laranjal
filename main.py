@@ -5,10 +5,6 @@ from flask_cors import CORS
 import requests
 from dotenv import load_dotenv
 
-
-from dotenv import load_dotenv  # <-- Importado
-
-# Carrega as variáveis de ambiente do seu arquivo kei.env
 load_dotenv('kei.env')
 
 app = Flask(__name__)
@@ -19,22 +15,13 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 @app.route('/analisar', methods=['POST'])
 def analisar_imagem():
     try:
-
         if not GEMINI_API_KEY:
             print("LOG: Chave GEMINI_API_KEY não configurada no terminal.")
             return jsonify({
                 'sucesso': False,
                 'erro': 'GEMINI_API_KEY não configurada no terminal.'
             }), 500
-       # 1. Valida a API Key
-        if not GEMINI_API_KEY:
-            print("LOG: Chave GEMINI_API_KEY não configurada no arquivo .env.")
-            return jsonify({
-                'sucesso': False,
-                'erro': 'GEMINI_API_KEY não configurada no arquivo .env.'
-            }), 500
 
-        # 2. Valida se o texto foi enviado (campo obrigatório)
         if 'texto' not in request.form or not request.form['texto'].strip():
             print("LOG: Erro - Campo 'texto' ausente na requisição.")
             return jsonify({
@@ -45,7 +32,6 @@ def analisar_imagem():
         prompt_texto = request.form['texto']
         parts = [{"text": prompt_texto}]
 
-        # 3. Adiciona imagem caso ela tenha sido enviada
         if 'imagem' in request.files and request.files['imagem'].filename != '':
             arquivo_imagem = request.files['imagem']
             bytes_imagem = arquivo_imagem.read()
@@ -59,19 +45,8 @@ def analisar_imagem():
                 }
             })
 
-
         # URL usando o modelo ativo no seu projeto: gemini-3.5-flash
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={GEMINI_API_KEY}"
-
-        # 4. Requisição para a API do Gemini (ATUALIZADO AQUI)
-        # URL sem a query string ?key=
-        url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
-
-        # A chave enviada via Header x-goog-api-key resolve o erro 401
-        headers = {
-            "Content-Type": "application/json",
-            "x-goog-api-key": GEMINI_API_KEY.strip()
-        }
 
         payload = {
             "contents": [
@@ -81,24 +56,18 @@ def analisar_imagem():
             ]
         }
 
-
         response = requests.post(url, json=payload, timeout=30)
-
-        response = requests.post(url, headers=headers, json=payload, timeout=30)
         dados = response.json()
 
         if response.status_code != 200:
             print(f"LOG: Erro retornado pela API do Gemini: {dados}")
             return jsonify({'sucesso': False, 'erro': dados}), response.status_code
 
-
         candidates = dados.get('candidates', [])
         if not candidates:
             return jsonify({'sucesso': False, 'erro': 'Resposta vazia da API', 'detalhes': dados}), 500
 
         texto_resposta = candidates[0]['content']['parts'][0]['text']
-        # 5. Extrai a resposta da API
-        texto_resposta = dados['candidates'][0]['content']['parts'][0]['text']
 
         return jsonify({
             'sucesso': True,

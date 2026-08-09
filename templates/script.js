@@ -23,7 +23,7 @@ async function enviarParaServidor() {
   }
 
   try {
-    const response = await fetch('http://192.168.1.34:5000/analisar', {
+    const response = await fetch('http:// localhost/analisar', {
       method: 'POST',
       body: formData
     });
