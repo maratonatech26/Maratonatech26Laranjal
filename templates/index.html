@@ -4,31 +4,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--<link rel="stylesheet" href="/static/style.css">-->
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
   <title></title>
+  
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
+  <div id="visor"></div>
   <div id="respostaApiText">
+    
+    <div class="containerMenu">
+      <button onclick="Menu()" id="menu" type="submit">Menu</button>
+      
+      <div class="matrix-container">
+        <h1 class="matrix-text" data-text="HarpIA">HarpIA</h1>
+        <div class="rain"></div>
+      </div>
+      
+      <button class="logo" type="submit"></button>
+    </div>
+
     <button onclick="tratarPhishing()" class="matrix" type="button">Phishing Financeiro <div class="code-rain"></div></button>
     <button onclick="tratarDeepfakes()" class="matrix" type="button">Deepfakes <div class="code-rain"></div></button>
     <button onclick="tratarSmishing()" class="matrix" type="button">Smishing <div class="code-rain"></div></button>
     <button onclick="tratarEngenhariaSocial()" class="matrix" type="button">Engenharia Social <div class="code-rain"></div></button>
     <button onclick="tratarEngajamento()" class="matrix" type="button">Golpes de Engajamento <div class="code-rain"></div></button>
   </div>
-  
+
   <div class="containerButtuns">
     <input id="inputImage" type="file" accept="image/*">
     <input type="text" id="inputPrompt" placeholder="Cole o texto ou link suspeito aqui...">
-    <button type="submit" onclick="enviarParaServidor()">Enviar para Análise</button>
+    <button type="submit" onclick="enviarParaServidor()" id="submitServidor">Enviar para Análise</button>
   </div>
+  
+  <script src="{{ url_for('static', filename='prompts.js') }}"></script>
 
- <script src="{{ url_for('static', filename='script.js') }}"></script>
- <!-- Biblioteca para converter Markdown em HTML -->
-
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+  <!-- 
+  <script src="/static/prompts.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/static/script.js" type="text/javascript" charset="utf-8"></script>
+  -->
 </body>
-
-
 </html>
