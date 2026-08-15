@@ -123,11 +123,11 @@ function Menu() {
             <div class="code-rain"></div>
         </a>
         <a href="/noticias" class="matrix menuBotao">
-             Últimas notícias do mundo digital 
+             Últimas notícias do mundo digital *desenvolvimento
             <div class="code-rain"></div>
         </a>
         <a href="/quiz" class="matrix menuBotao">
-            Fique atento sobre golpes 
+            Fique atento sobre golpes *desenvolvimento
             <div class="code-rain"></div>
         </a>
     `;

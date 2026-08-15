@@ -1,0 +1,66 @@
+body {
+  background-color: #0d1117;
+  color: #1CFF00;
+  font-family: 'Segoe UI', Roboto, monospace;
+  padding: 2rem;
+  margin: 0;
+}
+
+.container-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #1CFF00;
+  padding-bottom: 1rem;
+}
+
+h1 {
+  font-size: 24px;
+  text-shadow: 0 0 10px rgba(28, 255, 0, 0.5);
+}
+
+.btn-voltar {
+  color: #1CFF00;
+  text-decoration: none;
+  border: 1px solid #1CFF00;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.btn-voltar:hover {
+  background: #1CFF00;
+  color: #000;
+}
+
+/* Grid para organizar os cards lado a lado */
+.grid-noticias, .grid-videos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card-noticia, .card-video, .quiz-box {
+  background: rgba(16, 26, 20, 0.8);
+  border: 1px solid #1CFF00;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 0 10px rgba(28, 255, 0, 0.1);
+}
+
+.card-noticia h3, .card-video h3 {
+  margin-top: 0;
+  color: #00ffff;
+}
+
+.link-ler {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #1CFF00;
+  text-decoration: none;
+  font-weight: bold;
+}
+.link-ler:hover {
+  text-decoration: underline;
+}
