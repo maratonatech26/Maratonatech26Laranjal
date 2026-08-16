@@ -63,7 +63,8 @@ def analisar_com_gemini(prompt_texto, arquivo_imagem=None):
         })
 
     # Mantida a chave apenas nos headers
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
+
     headers = {
         "Content-Type": "application/json",
         "x-goog-api-key": gemini_key.strip()
