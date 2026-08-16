@@ -62,13 +62,14 @@ def analisar_com_gemini(prompt_texto, arquivo_imagem=None):
             }
         })
 
-    # Mantida a chave apenas nos headers
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent"
-
+    # A chave PRECISA estar no parâmetro ?key= da URL para o endpoint v1beta
+    api_key_clean = gemini_key.strip()
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key_clean}"
+    
     headers = {
-        "Content-Type": "application/json",
-        "x-goog-api-key": gemini_key.strip()
+        "Content-Type": "application/json"
     }
+    
     payload = {"contents": [{"parts": parts}]}
 
     try:
@@ -82,13 +83,12 @@ def analisar_com_gemini(prompt_texto, arquivo_imagem=None):
         if not candidates:
             return {'sucesso': False, 'erro': 'Nenhuma resposta gerada.', 'detalhes': dados}
 
-        # Extração defensiva para evitar IndexError/KeyError
         parts_resposta = candidates[0].get('content', {}).get('parts', [])
         if not parts_resposta:
             finish_reason = candidates[0].get('finishReason', 'Desconhecido')
             return {
                 'sucesso': False, 
-                'erro': f'A resposta foi interrompida ou bloqueada pelo filtro (Motivo: {finish_reason}).'
+                'erro': f'A resposta foi bloqueada ou interrompida (Motivo: {finish_reason}).'
             }
 
         texto_resposta = parts_resposta[0].get('text', '')
