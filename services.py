@@ -3,7 +3,6 @@ import requests
 import base64
 from dotenv import load_dotenv
 
-# Carrega o arquivo de ambiente
 load_dotenv('kei.env')
 
 def buscar_videos_youtube(termo='como identificar golpes virtuais phishing'):
@@ -13,7 +12,7 @@ def buscar_videos_youtube(termo='como identificar golpes virtuais phishing'):
 
     url = "https://www.googleapis.com/youtube/v3/search"
     params = {
-        'key': youtube_key,
+        'key': youtube_key.strip(),
         'q': termo,
         'part': 'snippet',
         'type': 'video',
@@ -63,7 +62,8 @@ def analisar_com_gemini(prompt_texto, arquivo_imagem=None):
             }
         })
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_key}"
+    # Mantida a chave apenas nos headers
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
     headers = {
         "Content-Type": "application/json",
         "x-goog-api-key": gemini_key.strip()
@@ -79,9 +79,18 @@ def analisar_com_gemini(prompt_texto, arquivo_imagem=None):
 
         candidates = dados.get('candidates', [])
         if not candidates:
-            return {'sucesso': False, 'erro': 'Resposta vazia da API', 'detalhes': dados}
+            return {'sucesso': False, 'erro': 'Nenhuma resposta gerada.', 'detalhes': dados}
 
-        texto_resposta = candidates[0]['content']['parts'][0]['text']
+        # Extração defensiva para evitar IndexError/KeyError
+        parts_resposta = candidates[0].get('content', {}).get('parts', [])
+        if not parts_resposta:
+            finish_reason = candidates[0].get('finishReason', 'Desconhecido')
+            return {
+                'sucesso': False, 
+                'erro': f'A resposta foi interrompida ou bloqueada pelo filtro (Motivo: {finish_reason}).'
+            }
+
+        texto_resposta = parts_resposta[0].get('text', '')
         return {'sucesso': True, 'analise': texto_resposta}
 
     except Exception as e:

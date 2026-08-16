@@ -3,7 +3,6 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from dotenv import load_dotenv
 
-# Importa as funções criadas no services.py
 from services import buscar_videos_youtube, analisar_com_gemini
 
 load_dotenv('kei.env')
@@ -31,7 +30,6 @@ def quiz():
 
 # --- ENDPOINTS DAS APIs (DADOS) ---
 
-# Rota para Análise com o Gemini
 @app.route('/analisar', methods=['POST'])
 def analisar():
     if 'texto' not in request.form or not request.form['texto'].strip():
@@ -44,10 +42,11 @@ def analisar():
     status_code = 200 if resultado.get('sucesso') else 500
     return jsonify(resultado), status_code
 
-# Rota para buscar vídeos do YouTube
 @app.route('/api/videos', methods=['GET'])
 def api_videos():
-    resultado = buscar_videos_youtube()
+    # Permite passar um termo de busca opcional via query string (ex: /api/videos?q=phishing)
+    termo = request.args.get('q', 'como identificar golpes virtuais phishing')
+    resultado = buscar_videos_youtube(termo)
     status_code = 200 if resultado.get('sucesso') else 500
     return jsonify(resultado), status_code
 
