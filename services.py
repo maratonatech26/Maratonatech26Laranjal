@@ -63,9 +63,9 @@ def analisar_com_gemini(prompt_texto, arquivo_imagem=None):
         })
 
     # A chave PRECISA estar no parâmetro ?key= da URL para o endpoint v1beta
-    api_key_clean = gemini_key.strip()
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key_clean}"
-    
+    API_KEY = gemini_key.strip()
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
+
     headers = {
         "Content-Type": "application/json"
     }
