@@ -46,7 +46,12 @@ h1 {
   border: 1px solid #1CFF00;
   border-radius: 8px;
   padding: 1.5rem;
+  max-width: 50%;
   box-shadow: 0 0 10px rgba(28, 255, 0, 0.1);
+}
+#container-videos{
+  display: flex;
+
 }
 
 .card-noticia h3, .card-video h3 {

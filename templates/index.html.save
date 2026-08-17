@@ -16,8 +16,7 @@
   <div id="respostaApiText">
     
     <div class="containerMenu">
-      
-      <button style="width: 100px;" onclick="Menu()" id="menu" type="submit">Menu</button>
+      <button onclick="Menu()" id="menu" type="submit">Menu</button>
       
       <div class="matrix-container">
         <h1 class="matrix-text" data-text="HarpIA">HarpIA</h1>
@@ -26,26 +25,19 @@
       
       <button class="logo" type="submit"></button>
     </div>
-<div id="spacoBotao">
+
     <button onclick="tratarPhishing()" class="matrix" type="button">Phishing Financeiro <div class="code-rain"></div></button>
     <button onclick="tratarDeepfakes()" class="matrix" type="button">Deepfakes <div class="code-rain"></div></button>
     <button onclick="tratarSmishing()" class="matrix" type="button">Smishing <div class="code-rain"></div></button>
     <button onclick="tratarEngenhariaSocial()" class="matrix" type="button">Engenharia Social <div class="code-rain"></div></button>
     <button onclick="tratarEngajamento()" class="matrix" type="button">Golpes de Engajamento <div class="code-rain"></div></button>
   </div>
-</div>
-  <div class="containerButtuns">
-  
-    <!-- Input original escondido -->
-    <input id="inputImage" type="file" accept="image/*" style="display: none;">
-    
-  
-    <!-- Label com o texto/símbolo "+" que substitui o botão padrão -->
-    <label for="inputImage" id="btnMais" title="Adicionar imagem">+</label>
 
+  <div class="containerButtuns">
+    <input id="inputImage" placeholder="+"  type="file" accept="image/*">
     <input type="text" id="inputPrompt" placeholder="Cole o texto ou link suspeito aqui...">
-    <button style="padding: 1px;" type="submit" onclick="enviarParaServidor()" id="submitServidor">Enviar</button>
-</div>
+    <button type="submit" onclick="enviarParaServidor()" id="submitServidor">Enviar para Análise</button>
+  </div>  
   <script src="{{ url_for('static', filename='prompts.js') }}"></script>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
